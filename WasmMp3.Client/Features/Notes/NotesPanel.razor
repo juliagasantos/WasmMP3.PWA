@@ -1,9 +1,7 @@
-﻿@using System.Text.Json
+﻿﻿@using System.Text.Json
 @using WasmMp3.Client.Features.Note
 @inject StorageService Storage
 
-@* vibrations *@ 
-@inject DeviceService Device 
 
 
 <h2 class="mb-3">Notas rápidas (Offline)</h2>
@@ -18,10 +16,11 @@
             Salvar
         </button>
         <button class="btn btn-outline-secondary" @onclick="ClearInput">
-            Limpar
+            Limpaaar 
         </button>
     </div>
 </div>
+
 
 @if (notes.Count == 0)
 {
@@ -69,8 +68,7 @@ else
         newText = "";
         await PersistAsync();
 
-        //vibração curta: ação positiva (salvou)
-        await Device.VibrateAsync(30);
+
     }
 
     private void ClearInput() => newText = "";
@@ -83,8 +81,7 @@ else
         notes.Remove(target);
         await PersistAsync();
 
-        //vibração um pouco mais forte: ação destrutiva (excluiu)
-        await Device.VibrateAsync(60);
+
 
     }
 
