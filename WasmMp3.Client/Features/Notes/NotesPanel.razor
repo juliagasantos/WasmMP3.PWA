@@ -20,6 +20,12 @@
         <button class="btn btn-outline-secondary" @onclick="ClearInput">
             Limpar
         </button>
+        <button class="btn btn-outline-info" @onclick="Paste">
+            Colar
+        </button>
+        <button class="btn btn-outline-info" @onclick="Battery">
+            Bateria
+        </button>
     </div>
 </div>
 
@@ -42,11 +48,14 @@ else
                     <button class="btn btn-sm btn-outline-danger" @onclick="() => DeleteNote(n.Id)">
                         Excluir
                     </button>
+                    <button class="btn btn-sm btn-outline-primary" @onclick="() =>  Copy(n.Text)">
+                        Copiar
+                    </button>
                 </div>
             </div>
         }
     </div>
-}
+} 
 
 @code {
     private const string StorageKey = "wasmmp3_notes_v1";
@@ -58,6 +67,7 @@ else
     {
         var json = await Storage.GetAsync(StorageKey);
         if (!string.IsNullOrWhiteSpace(json))
+
         {
             notes = JsonSerializer.Deserialize<List<NoteItem>>(json) ?? new();
         }
@@ -92,5 +102,19 @@ else
     {
         var json = JsonSerializer.Serialize(notes);
         await Storage.SetAsync(StorageKey, json);
+    }
+    private async Task Paste()
+    {
+        newText = await Device.ReadTextAsync();
+
+    }
+    private async Task Copy(string txt)
+    {
+        await Device.CopyTextAsync(txt);
+    }
+    private async Task Battery()
+    {
+        var level = await Device.getLevelAsync();
+        newText = $"Nível da bateria: {level}%";
     }
 }
